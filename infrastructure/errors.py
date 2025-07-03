@@ -1,0 +1,2 @@
+class BroadcastError(Exception):
+    pass
