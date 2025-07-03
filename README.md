@@ -46,14 +46,14 @@ python main.py
 
 ## 💡 Available Commands
 
-| Command               | Description                            |                                         |
-| --------------------- | -------------------------------------- | --------------------------------------- |
-| \`send <amount> \<trx | usdt>\`                                | Send TRX or USDT to a recipient address |
-| `address`             | Display your wallet address            |                                         |
-| `balance`             | Show TRX and USDT token balances       |                                         |
-| `resources`           | Show energy and bandwidth usage        |                                         |
-| `history`             | Show last 10 USDT (TRC20) transactions |                                         |
-| `CTRL+C`              | Exit the application                   |                                         |
+| Command                          | Description                             |                                         |
+| ---------------------            | --------------------------------------  | --------------------------------------- |
+| \`send <amount> \<trx | usdt>\`  | Send TRX or USDT to a recipient address |
+| `address`                        | Display your wallet address             |                                         |
+| `balance`                        | Show TRX and USDT token balances        |                                         |
+| `resources`                      | Show energy and bandwidth usage         |                                         |
+| `history`                        | Show last 10 USDT (TRC20) transactions  |                                         |
+| `CTRL+C`                         | Exit the application                    |                                         |
 
 ---
 
