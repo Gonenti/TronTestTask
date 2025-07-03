@@ -39,7 +39,7 @@ pip install -r requirements.txt
 Start the wallet CLI with:
 
 ```bash
-python main.py
+python __main__.py
 ```
 
 ---
