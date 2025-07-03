@@ -32,7 +32,6 @@ class TronAddress:
             unsigned_txn, self._private_key
         )
         receipt = await self._wrapper.execute_transaction(signed_txn)
-
         return receipt
 
 
