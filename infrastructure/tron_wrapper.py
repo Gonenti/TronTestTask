@@ -3,6 +3,7 @@ from tronpy import AsyncTron
 from tronpy.keys import PrivateKey
 from tronpy.providers import AsyncHTTPProvider
 from tronpy.async_tron import AsyncTransaction, AsyncTransactionBuilder
+from tronpy.keys import to_base58check_address
 from .errors import BroadcastError
 from .TRC20_abi import TRC20_ABI
 
@@ -67,20 +68,58 @@ class TronWrapper:
         address: str,
         limit: int = 10,
         order_by: str = "block_timestamp,desc"
-    ):
+    ) -> list[dict]:
         url = (
             f"{self._provider_url}/v1/accounts/{address}/transactions"
             f"?limit={limit}&order_by={order_by}"
         )
-        last_transactions = None
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, timeout=10) as resp:
+        async with aiohttp.ClientSession() as sess:
+            async with sess.get(url, timeout=10) as resp:
                 resp.raise_for_status()
-                payload = await resp.json()
-                last_transactions = payload.get("data", [])
+                data = (await resp.json()).get("data", [])
 
-        return last_transactions
+        enriched = []
+        for tx in data:
+            c = tx.get("raw_data", {}).get("contract", [{}])[0]
+            ctype = c.get("type")
+            val   = c.get("parameter", {}).get("value", {})
+
+            base = {
+                "txid":      tx.get("txID"),
+                "from":      val.get("owner_address"),
+                "to":        val.get("to_address"),
+                "timestamp": tx.get("block_timestamp"),
+                "symbol":    "?",
+                "amount":    0.0,
+            }
+
+            if ctype == "TransferContract":
+                base["symbol"] = "TRX"
+                base["amount"] = val.get("amount", 0) / 1e6
+
+            elif ctype == "TriggerSmartContract":
+                hex_addr = val.get("contract_address")
+                b58_addr = to_base58check_address(bytes.fromhex(hex_addr))
+
+                contract = await self._client.get_contract(b58_addr)
+                contract.abi = TRC20_ABI
+
+                symbol   = await contract.functions.symbol.call()
+                decs     = await contract.functions.decimals.call()
+
+                raw = val.get("data", "")
+                if isinstance(raw, str) and raw.startswith("0x"):
+                    amt = int(raw, 16)
+                else:
+                    amt = val.get("amount", 0)
+
+                base["symbol"] = symbol
+                base["amount"] = amt / (10 ** decs)
+
+
+            enriched.append(base)
+
+        return enriched
 
 
     async def get_account_resource(self, address: str):

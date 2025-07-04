@@ -1,6 +1,6 @@
 from decimal import Decimal
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 
 class ConsoleUI:
@@ -20,7 +20,7 @@ class ConsoleUI:
             "Available Commands:\n"
             "🔹 send <amount> <trx|usdt>   - Send funds to another address\n"
             "🔹 address                    - Show your wallet address\n"
-            "🔹 history                    - View your last 10 USDT transasctions\n"
+            "🔹 history                    - View your last 10 transasctions\n"
             "🔹 resources                  - Show resource usage (Bandwidth, Energy)\n"
             "🔹 exit                       - Exit the wallet app\n\n"
             "> "
@@ -28,7 +28,7 @@ class ConsoleUI:
 
 
     @staticmethod
-    def show_resources(resources: Dict[str, int]) -> None:
+    def show_resources(resources: dict[str, int]) -> None:
         print("⚙️  Fetching account resources...")
         for key, value in resources.items():
             formatted_key = key.replace('_', ' ').capitalize()
@@ -60,24 +60,19 @@ class ConsoleUI:
         )
 
     @staticmethod
-    def show_transaction_history(transactions: list[Dict], decimal: int) -> None:
-        print("📜  Fetching last 10 TRC20 transactions (USDT)...")
+    def show_transaction_history(transactions: list[dict]) -> None:
+        print("📜  Last transactions:")
         if not transactions:
             print("The transaction history is empty")
             return
-        
-        for i, tx in enumerate(transactions):
-            param = tx.get("raw_data", {}).get("contract", [{}])[0].get("parameter", {}).get("value", {})
-            amount = param.get("amount", 0)
-            to_addr = param.get("to_address")
-            from_addr = param.get("owner_address")
-            timestamp = tx.get("block_timestamp")
+
+        for i, tx in enumerate(transactions, start=1):
             print(
-                f"{i+1}. TXID: {tx.get('txID')}\n"
-                f"   Amount: {amount / decimal:.6f} USDT\n"
-                f"   From: {from_addr}\n"
-                f"   To: {to_addr}\n"
-                f"   Timestamp: {timestamp}\n"
+                f"{i}. TXID:      {tx['txid']}\n"
+                f"   Amount:    {tx['amount']:.6f} {tx['symbol']}\n"
+                f"   From:      {tx['from']}\n"
+                f"   To:        {tx['to']}\n"
+                f"   Timestamp: {tx['timestamp']}\n"
             )
 
 
@@ -92,7 +87,7 @@ class ConsoleUI:
 
 
     @staticmethod
-    def show_receipt(receipt: Dict[str, Any], network: str) -> None:
+    def show_receipt(receipt: dict[str, Any], network: str) -> None:
         tx_id = receipt.get("id") or receipt.get("transactionID")
         block = receipt.get("blockNumber")
         ts_ms = receipt.get("blockTimeStamp")

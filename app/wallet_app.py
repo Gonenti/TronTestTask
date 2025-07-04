@@ -63,7 +63,7 @@ class TronWalletApp:
 
     async def _cmd_history(self) -> None:
         txs = await self.tron_addr.get_last_tx(limit=10)
-        self.view.show_transaction_history(txs, DECIMALS)
+        self.view.show_transaction_history(txs)
 
 
     async def _cmd_resources(self) -> None:
