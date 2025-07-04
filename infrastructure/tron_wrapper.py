@@ -79,11 +79,15 @@ class TronWrapper:
                 resp.raise_for_status()
                 payload = await resp.json()
                 last_transactions = payload.get("data", [])
+
         return last_transactions
 
 
     async def get_account_resource(self, address: str):
         resource = await self._client.get_account_resource(address)
+        bandwidth = await self._client.get_bandwidth(address)
+        resource['bandwidth'] = bandwidth
+
         return resource
     
 
@@ -96,10 +100,11 @@ class TronWrapper:
         return account_info.get("balance", 0)
 
 
-    async def get_trc20_balance(self,
-                                address: str,
-                                token_contract_address: str
-                                ) -> int:
+    async def get_trc20_balance(
+            self,
+            address: str,
+            token_contract_address: str
+        ) -> int:
 
         contract = await self._client.get_contract(
             token_contract_address

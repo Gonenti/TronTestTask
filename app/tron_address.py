@@ -73,6 +73,7 @@ class TronAddress:
         net_limit = res["TotalNetLimit"]
         free_net_used = res["freeNetUsed"]
         free_net_limit = res["freeNetLimit"]
+        bandwidth = res["bandwidth"]
 
         return {
             "energy_used": energy_used,
@@ -81,6 +82,7 @@ class TronAddress:
             "net_limit": net_limit,
             "free_net_used": free_net_used,
             "free_net_limit": free_net_limit,
+            "bandwidth": bandwidth
         }
     
 
