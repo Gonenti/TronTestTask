@@ -21,7 +21,7 @@ class ConsoleUI:
             "🔹 send <amount> <trx|usdt>   - Send funds to another address\n"
             "🔹 address                    - Show your wallet address\n"
             "🔹 history                    - View your last 10 USDT transasctions\n"
-            "🔹 resources                  - Show network resource usage (Bandwidth, Energy)\n"
+            "🔹 resources                  - Show resource usage (Bandwidth, Energy)\n"
             "🔹 exit                       - Exit the wallet app\n\n"
             "> "
         ).strip()
