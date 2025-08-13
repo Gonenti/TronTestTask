@@ -9,7 +9,7 @@ class TronAddress:
         tron_wrapper: TronWrapper
     ):
         self._wrapper = tron_wrapper
-        account_detail = tron_wrapper.get_account_from_passphrase_phrase(passphrase)
+        account_detail = tron_wrapper.get_account_from_passphrase(passphrase)
         self._address = account_detail["base58check_address"]
         self._private_key = account_detail["private_key"]
 

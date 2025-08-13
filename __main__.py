@@ -4,9 +4,11 @@ from app import (
     ConsoleUI,
     PASSPHRASE,
     PROVIDER_URL, 
-    NETWORK, 
+    NETWORK,
     USDT_CONTRACT_ADDRESS
 )
+
+
 async def main() -> None:
     view = ConsoleUI()
     app = TronWalletApp(

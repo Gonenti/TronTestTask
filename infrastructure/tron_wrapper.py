@@ -104,8 +104,8 @@ class TronWrapper:
                 contract = await self._client.get_contract(b58_addr)
                 contract.abi = TRC20_ABI
 
-                symbol   = await contract.functions.symbol.call()
-                decs     = await contract.functions.decimals.call()
+                symbol = await contract.functions.symbol.call()
+                decs = await contract.functions.decimals.call()
 
                 raw = val.get("data", "")
                 if isinstance(raw, str) and raw.startswith("0x"):
@@ -130,7 +130,7 @@ class TronWrapper:
         return resource
     
 
-    def get_account_from_passphrase_phrase(self, passphrase: str):
+    def get_account_from_passphrase(self, passphrase: str):
         return self._client.generate_address_from_mnemonic(mnemonic=passphrase)
     
 
